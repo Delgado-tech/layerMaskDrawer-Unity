@@ -58,3 +58,5 @@ public class CubeEditor : Editor {
         mask = convertedValue;
 
     }
+    
+    
