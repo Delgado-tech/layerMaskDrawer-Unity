@@ -24,38 +24,38 @@ public class CubeEditor : Editor {
 
     void LayerMaskDrawer(int maskField, ref int lateMaskField, ref LayerMask mask) {
 
-        if (maskField != lateMaskField) {
-            if (maskField > 0) {
-                convertedValue = 0;
-                layers = new List<int>();
+        if (maskField == lateMaskField) return;
 
-                int tempVal = maskField;
-                int x = 1;
-                int l = 0;
+        if (maskField > 0) {
+            convertedValue = 0;
+            layers = new List<int>();
 
-                while (tempVal > 0) {
-                    if (x * 2 > tempVal) {
-                        layers.Add(l);
-                        tempVal -= x;
-                        x = 1;
-                        l = 0;
-                        continue;
-                    }
-                    x *= 2;
-                    l++;
+            int tempVal = maskField;
+            int x = 1;
+            int l = 0;
+
+            while (tempVal > 0) {
+                if (x * 2 > tempVal) {
+                    layers.Add(l);
+                    tempVal -= x;
+                    x = 1;
+                    l = 0;
+                    continue;
                 }
-
-                foreach (var layer in layers) {
-                    convertedValue += (int)Mathf.Pow(2, LayerMask.NameToLayer(InternalEditorUtility.layers[layer]));
-                }
-
-            } else {
-                convertedValue = maskField;
+                x *= 2;
+                l++;
             }
-            lateMaskField = maskField;
-            
-            mask = convertedValue;
+
+            foreach (var layer in layers) {
+                convertedValue += (int)Mathf.Pow(2, LayerMask.NameToLayer(InternalEditorUtility.layers[layer]));
+            }
+
+        } else {
+            convertedValue = maskField;
         }
+
+        lateMaskField = maskField;
+        mask = convertedValue;
 
     }
     
