@@ -54,11 +54,8 @@ public class CubeEditor : Editor {
             }
             lateMaskField = maskField;
             
-        }else{
-            convertedValue = mask;
+            mask = convertedValue;
         }
-
-        mask = convertedValue;
 
     }
     
