@@ -1,7 +1,7 @@
-using UnityEditor;
-using UnityEditorInternal;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
+using UnityEditorInternal;
 
 
 [CustomEditor(typeof(Cube))]
@@ -53,6 +53,9 @@ public class CubeEditor : Editor {
                 convertedValue = maskField;
             }
             lateMaskField = maskField;
+            
+        }else{
+            convertedValue = mask;
         }
 
         mask = convertedValue;
