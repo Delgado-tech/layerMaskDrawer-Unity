@@ -23,9 +23,9 @@ public class CubeEditor : Editor {
         //base.OnInspectorGUI(); //<--- Representa os elementos que estão sendo mostrados no Inspetor padrão, basta comentá-lo para mostrar apenas o que está presente aqui, use para debugar seus valores se quiser
 
   ``` 
-  Nós vamos usar váriaveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. Para você mostrar os valores que serão sobrescritos, você precisa pega-los por uma váriavel e coloca-los como valor nos Inputs do Editor. Para pegar os valores da classe Input basta Instância-la.
+  Nós vamos usar váriaveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. Para você vincular os valores do Editor com a classe `Cube` você precisa acessar esses valores e modifica-los quando for alterado algo no Inspetor sobrescrito, para isso Instâncie a classe `Cube`. 
   ```cs
   Cube cube = (Cube)target;
   ```
-  
+  Agora nos podemos acessar a váriavel da LayerMask e alterá-la quando o Inspetor sobrescritor for mudado (`cube.layer`).
 
