@@ -27,5 +27,9 @@ public class CubeEditor : Editor {
   ```cs
   Cube cube = (Cube)target;
   ```
-  Agora nos podemos acessar a váriavel da LayerMask e alterá-la quando o Inspetor sobrescritor for mudado (`cube.layer`).
+  Agora nos podemos acessar a váriavel da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (`cube.layer`).
+  Para criar um popup estilo do LayerMask, nos usamos `EditorGUILayout.MaskField(GUIContent, int, string[]);`. <br> 
+  `GUIContent` é referente ao nome e a descrição do Field; <br>
+  `int` é referente as opções selecionadas no popup; <br>
+  `string[]` é referente à um Array das opções selecionaveis. <br>
 
