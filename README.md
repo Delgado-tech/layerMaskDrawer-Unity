@@ -1,4 +1,4 @@
-# LayerMask no Editor [Unity] 
+# LayerMask no Editor [Unity] (Escrevendo...)
 
   Quando estamos criando um jogo na Unity é muito comum criarmos várias váriaveis de controle, e isso pode acabar fazendo com que o nosso Inspetor de objeto fique muito desorganizado e poluído, e para resolvermos isso podemos criar um script a parte extendendo á classe Editor que possíbilita montar e organizar o Inspetor ao nosso gosto. 
   Vamos criar um Editor para uma classe criada chamada `Cube`, essa classe tem apenas uma váriavel de LayerMask dentro dela e nada mais (`public LayerMask layer;`). 
@@ -11,7 +11,7 @@ using UnityEditor; // <--- Obrigatório
 using UnityEditorInternal; // <--- necessário para utilizar a classe InternalEditorUtility, terá mais foco á frente
 
 
-[CustomEditor(typeof(Cube))] // <--- Esse editor é referente à uma classe chamada Cube (será uzada ela como exemplo)
+[CustomEditor(typeof(Cube))] // <--- Esse editor é referente à uma classe chamada Cube (será usada ela como exemplo)
 public class CubeEditor : Editor {
 
   ```
