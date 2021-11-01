@@ -1,5 +1,10 @@
-# LayerMask no Editor [Unity] (Escrevendo...)
+<h1 align="center"> LayerMask no Editor [Unity] (Escrevendo...) </h1>
 
+> <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
+<br>
+
+## Introdução e preparando o ambiente
+>
   Quando estamos criando um jogo na Unity é muito comum criarmos várias váriaveis de controle, e isso pode acabar fazendo com que o nosso Inspetor de objeto fique muito desorganizado e poluído, e para resolvermos isso podemos criar um script a parte extendendo á classe Editor que possíbilita montar e organizar o Inspetor ao nosso gosto. 
   Vamos criar um Editor para uma classe criada chamada `Cube`, essa classe tem apenas uma váriavel de LayerMask dentro dela e nada mais (`public LayerMask layer;`). 
   
@@ -28,6 +33,10 @@ public class CubeEditor : Editor {
   Cube cube = (Cube)target;
   ```
   Agora nos podemos acessar a variável da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (via `cube.layer`).
+<br>
+
+## Criando o popup
+>
   Para criar um popup estilo do LayerMask, nos usamos `EditorGUILayout.MaskField(GUIContent, int, string[]);`. <br> 
   `GUIContent` é referente ao nome e a descrição do Field; <br>
   `int` é referente as opções selecionadas no popup; <br>
@@ -50,7 +59,11 @@ Se formos no inspetor conseguimos ver o popup com os valores do LayerMask que cr
 ```cs
 maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), maskField, InternalEditorUtility.layers);
 ``` 
-O valor é atualizado, porém percaba quando iniciamos o jogo:
+<br>
+
+## Entendendo possíveis erros
+>
+Feito a alteração a cima podemos ver que o valor é atualizado com sucesso, porém percaba quando iniciamos o jogo:
 >
 ![teste](https://user-images.githubusercontent.com/60985347/139671265-923f0d88-04bc-4ffa-8474-9a48484c73ef.gif)
 >
@@ -82,7 +95,8 @@ Você deve estar falando "Ué? Por que quando eu estou escolhendo uma camada em 
 Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo. Temos algumas formas de arrumar isso, eu irei comentar dois metódos diferentes que podemos optar, um é mais simples e com menos código, já o outro é maior e tem um resultado um pouco melhor que o anterior.
 >
 >
-## Método 1
+## Consertando popup
+### - Método 1
 >
 Uma possível saída seria criar um Array de strings de tamanho 32 (que é o número maxímo de layers que a Unity permite seu projeto ter) e fazer um `for` para colocar as camadas na posição correta, vamos tentar.
 >
@@ -103,11 +117,15 @@ maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer
 >![metodo1](https://user-images.githubusercontent.com/60985347/139709507-93c2370c-7a8a-456f-8ab4-64573297ebc9.gif)
 >
 O código está funcional! Porém visualmente não está igual, as layers vazias são aquelas linhas que você pode ver no popup de baixo, infelizmente não é possível não inclui-las no popup. <br>
-Você pode adotar esse método com esse código mais simples e menor que irá funcionar perfeitamenta, mas se você quiser que fique funcional **e** visualmente igual, teremos que optar por um método diferente, antes de ver qual é esse método, vou comentar um ajuste que quem queira optar por esse primeiro método pode fazer:
+Você pode adotar esse método com esse código mais simples e menor que irá funcionar perfeitamenta, mas se você quiser que fique funcional __***e***__ visualmente igual, teremos que optar por um método diferente, antes de ver qual é esse método, vou comentar um ajuste que quem queira optar por esse primeiro método pode fazer:
 >
 ```cs
 //podemos alterar o valor diretamente com esse método, então não tem a necessidade da váriavel de instância "maskField" no Editor
 cube.layer = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, layers);
 cube.maskField = cube.layer;
 ```
+<br>
+
+## Metódo 2
 >
+
