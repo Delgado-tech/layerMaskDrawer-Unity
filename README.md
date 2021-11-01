@@ -164,7 +164,17 @@ cube.maskField = cube.layer;
 <span id="4_subtopico2"></span>
 ### - Metódo 2
 >
+Apartir de um código diferente um pouco maior, nós conseguimos consertar o visual do resultado anterior, mas antes de nós começarmos a faze-lo devemos entender como que funciona o retorno do LayerMask (MaskField tem o mesmo tipo de retorno também). <br>
+Você já se perguntou por que o retorno do LayerMask.value é apenas um int e não um array de int's já que você pode selecionar multiplas camadas? Para entendermos o por que disso, vamos debugar o valor de LayerMask e ver o retorno dele `Debug.Log(layer.value)`.
 
+> Faça isso apenas se quiser testar por você mesmo, mas você terá o mesmo resultado do gif abaixo.
+![debuging](https://user-images.githubusercontent.com/60985347/139731230-f54cc78b-e9cf-419b-b53f-009b3e2d37ab.gif)
+
+Se analizarmos com exceção do `nothing` e `Everything` (que não são camadas de verdade e sim apenas opções de seleção rápida) conseguimos perceber um padrão apartir da primeira camada, `Default = 1` (layer 0), `TransparentFX = 2` (layer 1), `Ignore Raycast = 4` (layer 2), `Water = 16` (layer 4 (não apareceu no gif, mas teve esse retorno)), Que tipo de calculo está sendo usado ali? Se você respondeu potênciação acertou na mosca! Os indíces estão servindo como expoentes de base 2.
+
+![image](https://user-images.githubusercontent.com/60985347/139734070-116026f3-1995-4972-b454-214bd5cc695b.png)
+
+Basicamente quando escolhemos uma opção é esse o retorno, e quando escolhemos mais de uma, nos temos a soma das camadas como retorno `(Ex: Layer 1 (2) + Layer 3 (4) = 6)`, e o resultado dessa soma é única para cada combinação de layers selecionadas, por isso a Unity tem um limite de 32 layers, porque a cima disso os retornos terão números muito altos que o tipo de variável int não suporta, se for somado o resultado das layers de 0 até a 30 você terá o retorno de `2147483647` que é exatamente o limite que o int aceita, mas peraí e a layer 31 (a última)? Se somar com ela o valor vai utrapassar, não? Na lógica sim, por isso que o valor dela é diferente, ao invés dela valer `2^31` ela vale o limite negativo do int `-2147483647` 
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
