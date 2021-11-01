@@ -4,13 +4,14 @@
 <br>
 <br>
 
+<span id="sumario"></span>
 # Sumário
 - **<a href="#topico1">1. Introdução e preparando o ambiente</a>**
 - **<a href="#topico2">2. Criando o popup</a>**
 - **<a href="#topico3">3. Entendendo possíveis erros</a>**
 - **<a href="#topico4">4. Consertando o popup</a>** <br>
-ㅤㅤ✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
-ㅤㅤ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>**
+✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
+✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>**
 #
 <br>
 <br>
@@ -50,6 +51,7 @@ public class CubeEditor : Editor {
 
 <span id="topico2"></span>
 ## Criando o popup
+> <a href="#sumario"># retornar ao sumário</a>
 >
   Para criar um popup estilo do LayerMask, nos usamos `EditorGUILayout.MaskField(GUIContent, int, string[]);`. <br> 
   `GUIContent` é referente ao nome e a descrição do Field; <br>
@@ -77,6 +79,7 @@ maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer
 
 <span id="topico3"></span>
 ## Entendendo possíveis erros
+> <a href="#sumario"># retornar ao sumário</a>
 >
 Feito a alteração a cima podemos ver que o valor é atualizado com sucesso, porém percaba quando iniciamos o jogo:
 >
@@ -112,6 +115,7 @@ Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no p
 >
 <span id="topico4"></span>
 ## Consertando o popup
+> <a href="#sumario"># retornar ao sumário</a>
 >
 Com relação ao erro mencionado a cima temos algumas formas de arrumar isso, eu irei comentar dois metódos diferentes que podemos optar, um é mais simples e com menos código, já o outro é maior e tem um resultado um pouco melhor que o anterior.
 >
