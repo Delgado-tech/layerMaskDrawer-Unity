@@ -61,3 +61,15 @@ Dentro do Cube.js
 public LayerMask layer; // <--- Já constava antes
 public int maskField;
 ```
+Voltando para o script `CubeEditor.js`, nós dizemos para função MaskField usar o valor do scirpt `Cube.js`, e logo depois atualizamos esse valor com o valor atual do Editor.
+```cs
+maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField /*<--- alterado*/, InternalEditorUtility.layers);
+cube.maskField = maskField;
+```
+>
+E agora quando formos testar vai estar funcionando perfeitamente. Agora precisamos fazer com que o resultado das opções escolhidas seja recebido pela variável da LayerMask, o metódo MaskField retorna um int das opções escolhidas assim como o valor da LayerMask, você deve estar pensando "basta referênciar o valor recebido do método com o do LayerMask", e você está certo! Mas antes vamos ver o que acontece quando fazemos isso, primeiro vamos fazer essa referência.
+>
+```cs
+cube.layer = maskField;
+``` 
+>
