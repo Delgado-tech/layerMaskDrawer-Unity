@@ -3,7 +3,7 @@
 > <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
 <br>
 <br>
-<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139725469-2f2588b8-860e-4488-85f5-b2d3d98cb183.png" width="20%"></div>
 
 <span id="sumario"></span>
 # Sumário
