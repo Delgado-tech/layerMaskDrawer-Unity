@@ -8,13 +8,14 @@
 
 <span id="sumario"></span>
 # Sumário
-- **<a href="#topico1">1. Introdução e preparando o ambiente</a>**
-- **<a href="#topico2">2. Criando o popup</a>**
-- **<a href="#topico3">3. Entendendo possíveis erros</a>**
-- **<a href="#topico4">4. Consertando o popup</a>** <br>
-✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
-✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>**
-- **<a href="#footer">Rodapé</a>** <br>
+> - **<a href="#topico1">1. Introdução e preparando o ambiente</a>**
+> - **<a href="#topico2">2. Criando o popup</a>**
+> - **<a href="#topico3">3. Entendendo possíveis erros</a>**
+> - **<a href="#topico4">4. Consertando o popup</a>** <br>
+> ✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
+> ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>** ← A resolução do script presente no repositório
+> 
+>- **<a href="#footer">Rodapé</a>** <br>
 #
 
 <div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
@@ -174,7 +175,8 @@ Se analizarmos com exceção do `nothing` e `Everything` (que não são camadas 
 
 ![image](https://user-images.githubusercontent.com/60985347/139734070-116026f3-1995-4972-b454-214bd5cc695b.png)
 
-Basicamente quando escolhemos uma opção é esse o retorno, e quando escolhemos mais de uma, nos temos a soma das camadas como retorno `(Ex: Layer 1 (2) + Layer 3 (4) = 6)`, e o resultado dessa soma é única para cada combinação de layers selecionadas, por isso a Unity tem um limite de 32 layers, porque a cima disso os retornos terão números muito altos que o tipo int não suporta, se for somado o resultado das layers de 0 até a 30 você terá o retorno de `2147483647` que é exatamente o limite que o int aceita, mas peraí e a layer 31 (a última)? Se somar com ela o valor vai ultrapassar, não? Na lógica sim, por isso que o valor dela é diferente, ao invés dela valer `2^31` ela vale o limite negativo do int `-2147483647`, fazendo assim todas as suas combinações terem retorno negativo quando escolhida. As opções Nothing e Everything correspondem respectivamente aos valores, 0 e -1.
+Basicamente quando escolhemos uma opção é esse o retorno, e quando escolhemos mais de uma, nos temos a soma das camadas como retorno `(Ex: Layer 1 (2) + Layer 3 (4) = 6)`, e o resultado dessa soma é única para cada combinação de layers selecionadas, por isso a Unity tem um limite de 32 layers, porque a cima disso os retornos terão números muito altos que o tipo int não suporta, se for somado o resultado das layers de 0 até a 30 você terá o retorno de `2147483647` que é exatamente o limite que o int aceita, mas peraí e a layer 31 (a última)? Se somar com ela o valor vai ultrapassar, não? Na lógica sim, por isso que o valor dela é diferente, ao invés dela valer `2^31` ela vale o limite negativo do int `-2147483647`, fazendo assim todas as suas combinações terem retorno negativo quando escolhida. 
+> Obs: As opções Nothing e Everything correspondem respectivamente aos valores, 0 e -1.
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
