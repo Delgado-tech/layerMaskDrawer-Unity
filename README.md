@@ -5,12 +5,18 @@
 <br>
 
 # Sumário
-- **<a href="#capitulo1">Introdução e preparando o ambiente</a>**
+- **<a href="#topico1">1. Introdução e preparando o ambiente</a>**
+- **<a href="#topico2">2. Criando o popup</a>**
+- **<a href="#topico3">3. Entendendo possíveis erros</a>**
+- **<a href="#topico4">4. Consertando o popup</a>** <br>
+ㅤㅤ✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
+ㅤㅤ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>**
+#
 <br>
 <br>
+<span id="topico1"></span>
 
 ## Introdução e preparando o ambiente
-<span id="capitulo1"></span>
 >
   Quando estamos criando um jogo na Unity é muito comum criarmos várias váriaveis de controle, e isso pode acabar fazendo com que o nosso Inspetor de objeto fique muito desorganizado e poluído, e para resolvermos isso podemos criar um script a parte extendendo á classe Editor que possíbilita montar e organizar o Inspetor ao nosso gosto. 
   Vamos criar um Editor para uma classe criada chamada `Cube`, essa classe tem apenas uma váriavel de LayerMask dentro dela e nada mais (`public LayerMask layer;`). 
@@ -42,6 +48,7 @@ public class CubeEditor : Editor {
   Agora nos podemos acessar a variável da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (via `cube.layer`).
 <br>
 
+<span id="topico2"></span>
 ## Criando o popup
 >
   Para criar um popup estilo do LayerMask, nos usamos `EditorGUILayout.MaskField(GUIContent, int, string[]);`. <br> 
@@ -68,6 +75,7 @@ maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer
 ``` 
 <br>
 
+<span id="topico3"></span>
 ## Entendendo possíveis erros
 >
 Feito a alteração a cima podemos ver que o valor é atualizado com sucesso, porém percaba quando iniciamos o jogo:
@@ -99,10 +107,15 @@ Você deve estar falando "Ué? Por que quando eu estou escolhendo uma camada em 
 >
 ![image](https://user-images.githubusercontent.com/60985347/139693597-c2ce4aad-290c-48ca-83fb-2b9dfc8bb3b8.png)
 >
-Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo. Temos algumas formas de arrumar isso, eu irei comentar dois metódos diferentes que podemos optar, um é mais simples e com menos código, já o outro é maior e tem um resultado um pouco melhor que o anterior.
+Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo.
 >
 >
-## Consertando popup
+<span id="topico4"></span>
+## Consertando o popup
+>
+Com relação ao erro mencionado a cima temos algumas formas de arrumar isso, eu irei comentar dois metódos diferentes que podemos optar, um é mais simples e com menos código, já o outro é maior e tem um resultado um pouco melhor que o anterior.
+>
+<span id="4_subtopico1"></span>
 ### - Método 1
 >
 Uma possível saída seria criar um Array de strings de tamanho 32 (que é o número maxímo de layers que a Unity permite seu projeto ter) e fazer um `for` para colocar as camadas na posição correta, vamos tentar.
@@ -133,6 +146,7 @@ cube.maskField = cube.layer;
 ```
 <br>
 
+<span id="4_subtopico2"></span>
 ### - Metódo 2
 >
 
