@@ -79,17 +79,35 @@ Você deve estar falando "Ué? Por que quando eu estou escolhendo uma camada em 
 >
 ![image](https://user-images.githubusercontent.com/60985347/139693597-c2ce4aad-290c-48ca-83fb-2b9dfc8bb3b8.png)
 >
-Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo.
+Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo. Temos algumas formas de arrumar isso, eu irei comentar dois metódos diferentes que podemos optar, um é mais simples e com menos código, já o outro é maior e tem um resultado um pouco melhor que o anterior.
+>
+>
+## Método 1
+>
 Uma possível saída seria criar um Array de strings de tamanho 32 (que é o número maxímo de layers que a Unity permite seu projeto ter) e fazer um `for` para colocar as camadas na posição correta, vamos tentar.
 >
 ```cs
-//Em cima do método MaskField
-string[] layers = new string[32];
-for (int i = 0; i < layers.Length; i++) {
-  foreach (var layer in InternalEditorUtility.layers) {
-    if (layer == LayerMask.LayerToName(i)) {
-      layers[i] = layer;
+string[] layers = new string[32]; //Array que irá armazenar os nomes das layers
+for (int i = 0; i < layers.Length; i++) { //vai percorrer cada índice do array
+  foreach (var layer in InternalEditorUtility.layers) { //irá percorrer cada string do array InternalEditorUtility.layers
+    if (layer == LayerMask.LayerToName(i)) { //LayerMask.LayerName() é um método que você passa um índice de uma layer e retorna o nome dela
+      layers[i] = layer; //caso a string atual (layer) seja igual a string das layers da Unity, é adicionada no array layers essa string
     }
   }
 }
+
+maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, layers /*<--- alterado*/);
 ```
+>Resultado:
+>
+>![metodo1](https://user-images.githubusercontent.com/60985347/139709507-93c2370c-7a8a-456f-8ab4-64573297ebc9.gif)
+>
+O código está funcional! Porém visualmente não está igual, as layers vazias são aquelas linhas que você pode ver no popup de baixo, infelizmente não é possível não inclui-las no popup. <br>
+Você pode adotar esse método com esse código mais simples e menor que irá funcionar perfeitamenta, mas se você quiser que fique funcional **e** visualmente igual, teremos que optar por um método diferente, antes de ver qual é esse método, vou comentar um ajuste que quem queira optar por esse primeiro método pode fazer:
+>
+```cs
+//podemos alterar o valor diretamente com esse método, então não tem a necessidade da váriavel de instância "maskField" no Editor
+cube.layer = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, layers);
+cube.maskField = cube.layer;
+```
+>
