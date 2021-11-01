@@ -15,7 +15,7 @@ using UnityEditorInternal; // <--- necessário para utilizar a classe InternalEd
 public class CubeEditor : Editor {
 
   ```
-<br>
+>
   Dentro da classe do Editor nos sobrescrevemos o metódo referente á do inspetor:
   
   ```cs 
@@ -50,3 +50,14 @@ Se formos no inspetor conseguimos ver o popup com os valores do LayerMask que cr
 ```cs
 maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), maskField, InternalEditorUtility.layers);
 ``` 
+O valor é atualizado, porém percaba quando iniciamos o jogo:
+>
+![teste](https://user-images.githubusercontent.com/60985347/139671265-923f0d88-04bc-4ffa-8474-9a48484c73ef.gif)
+>
+O valor é resetado, mas por quê? Simples, a data das váriaveis é salva dentro dos GameObjets e não dentro dos scripts, e como o script do Editor não pode ficar dentro de um GameObject (porque a Unity não permite) ele não salvará a data das variáveis alteradas, por isso que o valor é resetado, mas então como nós armazenamos o valor dessa variável? A resposta é simples também, basta nós criarmos uma variável dentro do Script `Cube.js` que irá armazenar os valores da variável do Editor.
+>
+Dentro do Cube.js
+```cs
+public LayerMask layer; // <--- Já constava antes
+public int maskField;
+```
