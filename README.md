@@ -12,6 +12,7 @@
 - **<a href="#topico4">4. Consertando o popup</a>** <br>
 ✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
 ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>**
+- **<a href="#footer">Rodapé</a>** <br>
 #
 <br>
 <br>
@@ -154,3 +155,6 @@ cube.maskField = cube.layer;
 ### - Metódo 2
 >
 
+
+
+<span id="footer"></span>
