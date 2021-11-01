@@ -59,7 +59,7 @@ O valor é resetado, mas por quê? Simples, a data das váriaveis é salva dentr
 Dentro do Cube.js
 ```cs
 public LayerMask layer; // <--- Já constava antes
-public int maskField;
+[HideInInspector] public int maskField;
 ```
 Voltando para o script `CubeEditor.js`, nós dizemos para função MaskField usar o valor do scirpt `Cube.js`, e logo depois atualizamos esse valor com o valor atual do Editor.
 ```cs
@@ -71,5 +71,7 @@ E agora quando formos testar vai estar funcionando perfeitamente. Agora precisam
 >
 ```cs
 cube.layer = maskField;
-``` 
+```
 >
+![teste2](https://user-images.githubusercontent.com/60985347/139688479-72069842-e67f-426b-83d6-155b4d162bec.gif)
+
