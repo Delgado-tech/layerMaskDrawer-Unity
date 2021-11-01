@@ -1,3 +1,4 @@
+<span id="header"></span>
 <h1 align="center"> LayerMask no Editor [Unity] (Escrevendo...) </h1>
 
 > <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
@@ -165,5 +166,7 @@ cube.maskField = cube.layer;
 >
 
 
-<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
 <span id="footer"></span>
+<div align="center"><a href="#header">Voltar ao topo</a></div>
+
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
