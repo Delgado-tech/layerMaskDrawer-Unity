@@ -3,6 +3,7 @@
 > <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
 <br>
 <br>
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
 
 <span id="sumario"></span>
 # Sumário
@@ -14,6 +15,8 @@
 ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>**
 - **<a href="#footer">Rodapé</a>** <br>
 #
+
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
 <br>
 <br>
 <span id="topico1"></span>
@@ -50,6 +53,8 @@ public class CubeEditor : Editor {
   Agora nos podemos acessar a variável da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (via `cube.layer`).
 <br>
 
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
+
 <span id="topico2"></span>
 ## Criando o popup
 > <a href="#sumario"># retornar ao sumário</a>
@@ -77,6 +82,8 @@ Se formos no inspetor conseguimos ver o popup com os valores do LayerMask que cr
 maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), maskField, InternalEditorUtility.layers);
 ``` 
 <br>
+
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
 
 <span id="topico3"></span>
 ## Entendendo possíveis erros
@@ -113,7 +120,9 @@ Você deve estar falando "Ué? Por que quando eu estou escolhendo uma camada em 
 >
 Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo.
 >
->
+
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
+
 <span id="topico4"></span>
 ## Consertando o popup
 > <a href="#sumario"># retornar ao sumário</a>
@@ -156,5 +165,5 @@ cube.maskField = cube.layer;
 >
 
 
-
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
 <span id="footer"></span>
