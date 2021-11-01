@@ -23,13 +23,30 @@ public class CubeEditor : Editor {
         //base.OnInspectorGUI(); //<--- Representa os elementos que estão sendo mostrados no Inspetor padrão, basta comentá-lo para mostrar apenas o que está presente aqui, use para debugar seus valores se quiser
 
   ``` 
-  Nós vamos usar váriaveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. Para você vincular os valores do Editor com a classe `Cube` você precisa acessar esses valores e modifica-los quando for alterado algo no Inspetor sobrescrito, para isso Instâncie a classe `Cube`. 
+  Nós vamos usar variáveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. Para você vincular os valores do Editor com a classe `Cube` você precisa acessar esses valores e modifica-los quando for alterado algo no Inspetor sobrescrito, para isso Instâncie a classe `Cube`. 
   ```cs
   Cube cube = (Cube)target;
   ```
-  Agora nos podemos acessar a váriavel da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (`cube.layer`).
+  Agora nos podemos acessar a variável da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (via `cube.layer`).
   Para criar um popup estilo do LayerMask, nos usamos `EditorGUILayout.MaskField(GUIContent, int, string[]);`. <br> 
   `GUIContent` é referente ao nome e a descrição do Field; <br>
   `int` é referente as opções selecionadas no popup; <br>
   `string[]` é referente à um Array das opções selecionaveis. <br>
+>
+Vamos criar uma variável de instância que irá armazenar as opções selecionadas.
+```cs
+int maskField;
+```
+>
+Agora só precisamos pegar os valores que terão dentro do popup, no caso os mesmo da LayerMask, por isso nós chamamos o namespace `UnityEditorInternal`, nos conseguimos pegar as camadas pela chamada da variável `InternalEditorUtility.layers`, ela retorna um array de strings com todos os nomes das layers existentes.
+```cs
+EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), maskField, InternalEditorUtility.layers);
+// new GUIContent(string label, string descrição)
+```
+![image](https://user-images.githubusercontent.com/60985347/139606457-d18b5175-10b8-4c3c-b3e2-1c8215c5e6b2.png)
+> obs: caso você não tenha comentado o `base.OnInspectorGUI();` aparecerá as variáveis do script padrão (cube.js), por isso tem dois campos chamado Layer.
 
+Se formos no inspetor conseguimos ver o popup com os valores do LayerMask que criamos, porem não é possível escolher outro valor no popup, pois o valor escolhido não é atualizado no script quando você altera ele pelo inspetor, para corrigir isso, basta fazer ele receber o retorno do método MaskField (retorna os valores escolhidos).
+```cs
+maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), maskField, InternalEditorUtility.layers);
+``` 
