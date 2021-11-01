@@ -74,4 +74,22 @@ cube.layer = maskField;
 ```
 >
 ![teste2](https://user-images.githubusercontent.com/60985347/139688479-72069842-e67f-426b-83d6-155b4d162bec.gif)
-
+>
+Você deve estar falando "Ué? Por que quando eu estou escolhendo uma camada em um, está sendo escolhida outra camada no outro?", bem a razão disso acontecer é porque o LayerMask ele pega as layers existêntes da Unity.
+>
+![image](https://user-images.githubusercontent.com/60985347/139693597-c2ce4aad-290c-48ca-83fb-2b9dfc8bb3b8.png)
+>
+Ele contabiliza todas as layers incluindo as vazias porém não mostra elas no popup de LayerMask. Já o `InternalEditorUtility` só retorna os valores não vazios do LayerMask, por isso esse erro está acontecendo.
+Uma possível saída seria criar um Array de strings de tamanho 32 (que é o número maxímo de layers que a Unity permite seu projeto ter) e fazer um `for` para colocar as camadas na posição correta, vamos tentar.
+>
+```cs
+//Em cima do método MaskField
+string[] layers = new string[32];
+for (int i = 0; i < layers.Length; i++) {
+  foreach (var layer in InternalEditorUtility.layers) {
+    if (layer == LayerMask.LayerToName(i)) {
+      layers[i] = layer;
+    }
+  }
+}
+```
