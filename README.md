@@ -254,6 +254,54 @@ Primeira coisa, podemos fazer com que apenas o código de conversão seja execut
 if(maskField == cube.maskField) return; // se os valores continuarem iguais, não tem necessidades de executar a formula
 // if (maskField != 0 && maskField != -1) {
 ``` 
+Segunda coisa, toda essa formúla está para apenas um único popup, e se você quiser adicionar mais de um teria que ficar copiando e colando essa formúla, não seria prático e ficaria poluído, por isso podemos colocar essa formúla em um metódo e chama-la para aquele popup.
+```cs
+void LayerMaskDrawer(int maskField, ref int lateMaskField, ref LayerMask mask){
+}
+```
+O primeiro valor será referente ao retorno do MaskField, o segundo valor será referente ao `cube.maskField` e o terceiro referente a variável da LayerMask. <br>
+Nesse código a única coisa que vamos fazer é substituir onde está `cube.maskField` por `lateMaskField` e onde está `cube.layer` por `mask`.
+```cs
+void LayerMaskDrawer(int maskField, ref int lateMaskField, ref LayerMask mask) {
+
+  if (maskField == lateMaskField) return;
+
+    if (maskField != 0 && maskField != -1) {
+       convertedValue = 0;
+       layers = new List<string>();
+
+       int tempVal = maskField;
+       int x = 1;
+       int l = 0;
+
+       while (tempVal > 0) {
+          if (x * 2 > tempVal) {
+            layers.Add(InternalEditorUtility.layers[l]);
+            tempVal -= x;
+            x = 1;
+            l = 0;
+            continue;
+       }
+      x *= 2;
+      l++;
+    }
+
+    convertedValue = LayerMask.GetMask(layers.ToArray());
+
+  } else {
+     convertedValue = maskField;
+  }
+
+  lateMaskField = maskField;
+  mask = convertedValue;
+
+}
+```
+Agora é só chamar o metódo:
+```cs
+maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, InternalEditorUtility.layers);
+LayerMaskDrawer(maskField, ref cube.maskField, ref cube.layer);
+```
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
