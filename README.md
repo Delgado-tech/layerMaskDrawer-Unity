@@ -204,7 +204,7 @@ int l = 0;
 > A formúla funcionará dessa forma: será utilizado um `while` que irá se manter em loop até `tempVal` tiver o valor de 0, a cada chamada a variável `x` multiplicará ela mesma por 2, assim ela corresponderá ao valor de layer (lembrando que o valor das layers é dado usando o índice delas como expoente de base 2), e caso o próximo incremento de `x` ultrapassar o valor de `tempVal` quer dizer que achamos o índice de uma layer, então decrementamos `x` de `tempVal`, e resetamos o valor de `x`, assim o loop de while será repetido até 0, com a variável `l` nós saberemos que índice foi esse, e poderemos adiciona-lo na List `layers`.
 >
 ```cs
-if (maskField != 0 || maskField != -1) { // caso o valor for 0 ou -1 não precisará chamar esse código, já que não é possível escolher outra opção quando esses valores forem escolhidos
+if (maskField != 0 && maskField != -1) { // caso o valor for 0 ou -1 não precisará chamar esse código, já que não é possível escolher outra opção quando esses valores forem escolhidos
   convertedValue = 0; // será preciso que esse valor seja resetado caso entre nesse if
   layers = new List<int>(); // será preciso que esse valor seja resetado caso entre nesse if
 
@@ -237,6 +237,18 @@ if (maskField != 0 || maskField != -1) { // caso o valor for 0 ou -1 não precis
 cube.maskField = maskField; // <--- essa atribuição lá do começo foi realocada para cá
 cube.layer = convertedValue; // <--- irá receber o valor convertido
 ```
+Agora que sabemos os índices das layers que estão sendo utilizadas pelo metódo MaskField podemos conseguir seus nomes e utilizar o metódo `LayerMask.NameToLayer` para encontra seu índice correspondente nas layers da Unity, então basta nós pegarmos esse valor e utiliza-lo como expoente de base 2, assim teremos o valor convertido das layers de MaskField para as layers da Unity.
+
+```cs
+// esse loop será colocado no campo indicado a cima
+foreach (var layer in layers) {
+  convertedValue += (int)Mathf.Pow(2, LayerMask.NameToLayer(InternalEditorUtility.layers[layer]));
+}
+```
+> Resultado: <br>
+> ![resultado](https://user-images.githubusercontent.com/60985347/139840821-5f03d114-1fed-4d28-aca9-07b159c3466e.gif)
+
+
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
