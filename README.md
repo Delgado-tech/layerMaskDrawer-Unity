@@ -187,7 +187,12 @@ Vamos começar criando as váriaveis necessárias, ao todo são 5 váriaveis, 2 
 int convertedValue;
 List<int> layers;
 ```
+`convertedValue` será a variável que irá armazenar o valor convertido e passa-lo para variável `layer` do script `Cube`. <br>
+`layers` armazenará o índice das layers escolhidas.
 
+```cs
+
+```
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
