@@ -62,9 +62,9 @@ public class CubeEditor : Editor {
 > <a href="#sumario"># retornar ao sumário</a>
 >
   Para criar um popup estilo do LayerMask, nos usamos `EditorGUILayout.MaskField(GUIContent, int, string[]);`. <br> 
-  `GUIContent` é referente ao nome e a descrição do Field; <br>
-  `int` é referente as opções selecionadas no popup; <br>
-  `string[]` é referente à um Array das opções selecionaveis. <br>
+  ✢ `GUIContent` é referente ao nome e a descrição do Field; <br>
+  ✢ `int` é referente as opções selecionadas no popup; <br>
+  ✢ `string[]` é referente à um Array das opções selecionaveis. <br>
 >
 Vamos criar uma variável de instância que irá armazenar as opções selecionadas.
 ```cs
@@ -183,15 +183,47 @@ Certo, agora sabendo isso, nós devemos pegar o valor das opções escolhidas do
 Vamos começar criando as váriaveis necessárias, ao todo são 5 váriaveis, 2 de instância e 3 locais.
 
 ```cs
-//variáveis de instância
+// variáveis de instância
 int convertedValue;
 List<int> layers;
 ```
-`convertedValue` será a variável que irá armazenar o valor convertido e passa-lo para variável `layer` do script `Cube`. <br>
-`layers` armazenará o índice das layers escolhidas.
+✢ `convertedValue` será a variável que irá armazenar o valor convertido e passa-lo para variável `layer` do script `Cube`. <br>
+✢ `layers` armazenará o índice das layers escolhidas.
+
 
 ```cs
+// variáveis locais
+int tempVal = maskField;
+int x = 1;
+int l = 0;
+```
+✢ `tempVal`, vamos utilizar essa variável para armazenar o valor de maskField, pois esse valor será alterado e não queremos que isso aconteça com a variável principal (se utilizarmos o valor de maskField direto iria acontecer do popup travar na opção `Nothing`, você vai entender o por que com a formúla a baixo). <br>
+✢ `x` será o valor decrescido da váriavel `tempVal`. <br>
+✢ `l`, corresponde ao índice da layer com aquele valor, ela será adicionada na List de `layers`.
 
+> A formúla funcionará dessa forma: será utilizado um `while` que irá se manter em loop até `tempVal` tiver o valor de 0, a cada chamada a variável `x` multiplicará ela mesma por 2, assim ela corresponderá ao valor de layer (lembrando que o valor das layers é dado usando o índice delas como expoente de base 2), e caso o próximo incremento de `x` ultrapassar o valor de `tempVal` quer dizer que achamos o índice de uma layer, então decrementamos `x` de `tempVal`, e resetamos o valor de `x`, assim o loop de while será repetido até 0, com a variável `l` nós saberemos que índice foi esse, e poderemos adiciona-lo na List `layers`.
+>
+```cs
+if (maskField != 0 || maskField != -1) { // caso o valor for 0 ou -1 não precisará chamar esse código, já que não é possível escolher outra opção quando esses valores forem escolhidos
+  convertedValue = 0; // será preciso que esse valor seja resetado caso entre nesse if
+  layers = new List<int>(); // será preciso que esse valor seja resetado caso entre nesse if
+
+  int tempVal = maskField;
+  int x = 1;
+  int l = 0;
+
+  while (tempVal > 0) {
+    if (x * 2 > tempVal) {
+       layers.Add(l);
+       tempVal -= x;
+       x = 1;
+       l = 0;
+       continue;
+    }
+    x *= 2;
+    l++;
+  }
+}
 ```
 
 <span id="footer"></span>
