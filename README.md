@@ -1,5 +1,5 @@
 <span id="header"></span>
-<h1 align="center"> LayerMask no Editor [Unity] (Escrevendo...) </h1>
+<h1 align="center"> LayerMask no Editor [Unity] </h1>
 
 > <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
 <br>
