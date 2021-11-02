@@ -26,7 +26,7 @@ public class CubeEditor : Editor {
 
         if (maskField == lateMaskField) return;
 
-        if (maskField != 0 || maskField != -1) {
+        if (maskField != 0 && maskField != -1) {
             convertedValue = 0;
             layers = new List<int>();
 
