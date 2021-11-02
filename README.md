@@ -185,10 +185,10 @@ Vamos começar criando as váriaveis necessárias, ao todo são 5 váriaveis, 2 
 ```cs
 // variáveis de instância
 int convertedValue;
-List<int> layers;
+List<string> layers;
 ```
 ✢ `convertedValue` será a variável que irá armazenar o valor convertido e passa-lo para variável `layer` do script `Cube`. <br>
-✢ `layers` armazenará o índice das layers escolhidas.
+✢ `layers` armazenará o nome das layers escolhidas.
 
 
 ```cs
@@ -206,7 +206,7 @@ int l = 0;
 ```cs
 if (maskField != 0 && maskField != -1) { // caso o valor for 0 ou -1 não precisará chamar esse código, já que não é possível escolher outra opção quando esses valores forem escolhidos
   convertedValue = 0; // será preciso que esse valor seja resetado caso entre nesse if
-  layers = new List<int>(); // será preciso que esse valor seja resetado caso entre nesse if
+  layers = new List<string>(); // será preciso que esse valor seja resetado caso entre nesse if
 
   int tempVal = maskField;
   int x = 1;
@@ -214,7 +214,7 @@ if (maskField != 0 && maskField != -1) { // caso o valor for 0 ou -1 não precis
 
   while (tempVal > 0) {
     if (x * 2 > tempVal) {
-       layers.Add(l);
+       layers.Add(InternalEditorUtility.layers[l]); // adiciona na lista o nome da layer correspondente ao índice "l"
        tempVal -= x;
        x = 1;
        l = 0;
@@ -237,18 +237,23 @@ if (maskField != 0 && maskField != -1) { // caso o valor for 0 ou -1 não precis
 cube.maskField = maskField; // <--- essa atribuição lá do começo foi realocada para cá
 cube.layer = convertedValue; // <--- irá receber o valor convertido
 ```
-Agora que sabemos os índices das layers que estão sendo utilizadas pelo metódo MaskField podemos conseguir seus nomes e utilizar o metódo `LayerMask.NameToLayer` para encontra seu índice correspondente nas layers da Unity, então basta nós pegarmos esse valor e utiliza-lo como expoente de base 2, assim teremos o valor convertido das layers de MaskField para as layers da Unity.
+Agora que sabemos os nomes das layers que estão sendo utilizadas pelo metódo MaskField podemos conseguir converter esse valor para o das layers da Unity com o método `LayerMask.GetMask(string[])`, ele basicamente retorna a soma dos valores das layers informadas no Array.
 
 ```cs
-// esse loop será colocado no campo indicado a cima
-foreach (var layer in layers) {
-  convertedValue += (int)Mathf.Pow(2, LayerMask.NameToLayer(InternalEditorUtility.layers[layer]));
-}
+// essa linha será colocado no campo indicado a cima
+convertedValue = LayerMask.GetMask(layers.ToArray());
 ```
 E *tcharam*! Temos uma cópia exata de um popup de LayerMask.
 > Resultado: <br>
 > ![resultado](https://user-images.githubusercontent.com/60985347/139840821-5f03d114-1fed-4d28-aca9-07b159c3466e.gif) <br>
 > Nota: Podemos dentro do script `Cube` colocar a tag `[HideInInspector]` ao lado de `public LayerMask layer` ou comentar a linha com `base.OnInspectorGUI();` no script do Editor para mostrar apenas o popup criado.
+
+O código está quase finalizado, só precisamos fazer dois ajustes nele para ele ficar otimizado e prático. <br>
+Primeira coisa, podemos fazer com que apenas o código de conversão seja executado quando for alterado algum valor no popup, ao invés de executa-lo a todo momento.
+```cs
+if(maskField == cube.maskField) return; // se os valores continuarem iguais, não tem necessidades de executar a formula
+// if (maskField != 0 && maskField != -1) {
+``` 
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
