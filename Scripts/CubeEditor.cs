@@ -9,7 +9,7 @@ public class CubeEditor : Editor {
 
     int maskField;
     int convertedValue;
-    List<int> layers;
+    List<string> layers;
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
@@ -28,7 +28,7 @@ public class CubeEditor : Editor {
 
         if (maskField != 0 && maskField != -1) {
             convertedValue = 0;
-            layers = new List<int>();
+            layers = new List<string>();
 
             int tempVal = maskField;
             int x = 1;
@@ -36,7 +36,7 @@ public class CubeEditor : Editor {
 
             while (tempVal > 0) {
                 if (x * 2 > tempVal) {
-                    layers.Add(l);
+                    layers.Add(InternalEditorUtility.layers[l]);
                     tempVal -= x;
                     x = 1;
                     l = 0;
@@ -46,9 +46,7 @@ public class CubeEditor : Editor {
                 l++;
             }
 
-            foreach (var layer in layers) {
-                convertedValue += (int)Mathf.Pow(2, LayerMask.NameToLayer(InternalEditorUtility.layers[layer]));
-            }
+            convertedValue = LayerMask.GetMask(layers.ToArray());
 
         } else {
             convertedValue = maskField;
