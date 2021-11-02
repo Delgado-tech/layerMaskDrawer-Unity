@@ -223,7 +223,19 @@ if (maskField != 0 || maskField != -1) { // caso o valor for 0 ou -1 não precis
     x *= 2;
     l++;
   }
+  
+  /*
+  /////////////////////////////
+  Próximo passo ficará aqui
+  /////////////////////////////
+  */
+  
+} else {
+  convertedValue = maskField; // se o valor for 0 ou -1
 }
+
+cube.maskField = maskField; // <--- essa atribuição lá do começo foi realocada para cá
+cube.layer = convertedValue; // <--- irá receber o valor convertido
 ```
 
 <span id="footer"></span>
