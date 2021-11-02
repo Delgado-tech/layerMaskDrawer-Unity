@@ -245,10 +245,10 @@ foreach (var layer in layers) {
   convertedValue += (int)Mathf.Pow(2, LayerMask.NameToLayer(InternalEditorUtility.layers[layer]));
 }
 ```
+E *tcharam*! Temos uma cópia exata de um popup de LayerMask.
 > Resultado: <br>
-> ![resultado](https://user-images.githubusercontent.com/60985347/139840821-5f03d114-1fed-4d28-aca9-07b159c3466e.gif)
-
-
+> ![resultado](https://user-images.githubusercontent.com/60985347/139840821-5f03d114-1fed-4d28-aca9-07b159c3466e.gif) <br>
+> Nota: Podemos dentro do script `Cube` colocar a tag `[HideInInspector]` ao lado de `public LayerMask layer` ou comentar a linha com `base.OnInspectorGUI();` no script do Editor para mostrar apenas o popup criado.
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
