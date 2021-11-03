@@ -14,7 +14,8 @@
 > - **<a href="#topico4">4. Consertando o popup</a>** <br>
 > ✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
 > ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>** ← A resolução do script presente no repositório
-> 
+> - **<a href="#conclusao">5. Conclusão</a>**
+>
 >- **<a href="#footer">Rodapé</a>** <br>
 #
 
@@ -158,8 +159,9 @@ Você pode adotar esse método com esse código mais simples e menor que irá fu
 ```cs
 //podemos alterar o valor diretamente com esse método, então não tem a necessidade da váriavel de instância "maskField" no Editor
 cube.layer = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, layers);
-cube.maskField = cube.layer;
+if(maskField != cube.maskField) cube.maskField = cube.layer; // para fazer a alteração apenas quando for mudado algum valor
 ```
+> <a href="#conclusao"># ir para a Conclusão</a>
 <br>
 
 <span id="4_subtopico2"></span>
@@ -302,6 +304,10 @@ Agora é só chamar o metódo:
 maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, InternalEditorUtility.layers);
 LayerMaskDrawer(maskField, ref cube.maskField, ref cube.layer);
 ```
+
+<span id="conclusao"></span>
+## Conclusão
+Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu fiz, uma coisas que vale lembrar é que esses metódos mostrados são para você escolher o valor pelo inspetor, se você altera-lo por código não irá alterar visualmente no inspetor, caso queira fazer isso, basta fazer o mesmo código só que com a conversão inversa.
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
