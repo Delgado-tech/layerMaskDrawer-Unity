@@ -342,7 +342,7 @@ static void InternalMaskUpdate(ref int convertedValue, ref int lateMaskField, re
   while (tempVal != 0) {
 
     if (tempVal > 0 && x * 2 > tempVal) {
-      layers.Add(LayerMask.LayerToName(l));
+      layers.Add(LayerMask.LayerToName(l)); // LayerMask.LayerToName(int) - Passa o índice da camada e retorna o nome dela
       tempVal -= x;
       x = 1;
       l = 0;
@@ -362,23 +362,94 @@ static void InternalMaskUpdate(ref int convertedValue, ref int lateMaskField, re
     l++;
   }
 
-  lateMaskField = 0;
-  for (int i = 0; i < InternalEditorUtility.layers.Length; i++) {
-    foreach (var layer in layers) {
-      if (InternalEditorUtility.layers[i] == layer) {
-        lateMaskField += (int)Mathf.Pow(2, i);
+  lateMaskField = 0; // variável referencia cube.maskField, ela que manda em qual opção visualmente está selecionada no inspetor
+  for (int i = 0; i < InternalEditorUtility.layers.Length; i++) { // percorre todas as layers do InternalEditorUtility.layers
+    foreach (var layer in layers) { // percorre cada layer registrada na List de strings
+      if (InternalEditorUtility.layers[i] == layer) { // caso o nome da layer do InternalEditor coincida com a da List
+        lateMaskField += (int)Mathf.Pow(2, i); // adiciona o valor daquela layer para cube.maskField, para pegar o valor da camada, usa-se o seu índice como exponte de base 2, como o retorno é float você casta o retorno como (int)
        }
      }
    }
 
   } else {
-    lateMaskField = mask;
+    lateMaskField = mask; // caso o valor alterado internamente for 0 ou -1
   }
 
-  convertedValue = mask;
+  convertedValue = mask; // atualiza o valor convertido para ficar igual o de mask (ou cube.layer)
   }
 }
 ```
+Voltando para o metódo Draw:
+```cs
+public static void Draw(int maskField, ref int lateMaskField, ref int convertedValue, ref LayerMask mask) {
+
+if (maskField == lateMaskField && mask != convertedValue) { //caso o valor de maskField não tenha sido alterado, mas o valor de mask tenha
+  InternalMaskUpdate(ref convertedValue, ref lateMaskField, ref mask);
+  return;
+}
+
+if (maskField == lateMaskField) return;
+
+``` 
+<br>
+
+Agora podemos voltar para o script `CubeEditor.js` e fazer as últimas alterações.
+CubeEditor.js
+```cs
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using UnityEditorInternal;
+using EditorMethods; // como criamos um namespace para chamar apenas quando precisarmos do metódo, usamos o using para chamar ele agora
+
+[CustomEditor(typeof(Cube))]
+public class CubeEditor : Editor {
+
+  int maskField;
+  int convertedValue;
+  //Foi realocado List<string> layers para o LayerMaskDrawer
+
+  public override void OnInspectorGUI() {
+    base.OnInspectorGUI();
+
+    Cube cube = (Cube)target;	
+
+
+    maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, InternalEditorUtility.layers);
+    LayerMaskDrawer.Draw(maskField, ref cube.maskField, ref convertedValue, ref cube.layer); // <--- Metódo chamado em baixo do metódo MaskField
+
+  }
+}
+```
+E pronto! Você pode usar esse metódo que fizemos para qualquer editor que criar que ele estará funcionando perfeitamente, porém caso você queira criar mais de um popup você teria que criar três variáveis para cada um que criar, e isso não seria bom, porque poluíria muito o código. A melhor forma para contornarmos essa situação é substituir as variáveis de instância por Arrays, assim usamos a mesma variável, porém só chamamos o seu índice.
+<br>
+
+CubeEditor.js
+```cs
+int PopupsCount = 2; // como todo array precisa de um tamanho podemos controlar por essa variável o tamanho dele
+int[] maskField;
+int[] convertedValue;
+```
+Cube.js
+```cs
+[HideInInspector] public int[] maskField;
+```
+<br>
+
+Agora precisamos declarar o seus valores dentro de `OnInspectorGUI()`;
+```cs
+//Cube cube = (Cube)target; //<--- apenas referencia
+
+maskField = new int[PopupsCount]; // <--- olha aí o nosso demilitador (PopupsCount)
+convertedValue = new int[PopupsCount];
+if (cube.maskField.Length == 0) cube.maskField = new int[PopupsCount]; // como que cube.maskField é um valor que não pode resetar, chamamos ele apenas caso ele não tenha sido iniciado.
+```
+E para finalizar basta atualizar os valores nos metódos:
+```cs
+maskField[0] = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField[0], InternalEditorUtility.layers);
+LayerMaskDrawer.Draw(maskField[0], ref cube.maskField[0], ref convertedValue[0], ref cube.layer); // <--- Metódo chamado em baixo do metódo MaskField
+```
+Agora sim! O código está 100%! Caso queira criar um outro LayerMask, é só copiar essas duas linhas a cima e aumentar o valor do índice, e trocar a layer que está sendo referenciada por outra (`ref cube.layer -> ref cube.outraLayer`).
 
 <span id="conclusao"></span>
 ## Conclusão
