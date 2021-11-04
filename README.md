@@ -394,6 +394,7 @@ if (maskField == lateMaskField) return;
 <br>
 
 Agora podemos voltar para o script `CubeEditor.js` e fazer as últimas alterações.
+<br>
 CubeEditor.js
 ```cs
 using System.Collections.Generic;
@@ -451,9 +452,11 @@ LayerMaskDrawer.Draw(maskField[0], ref cube.maskField[0], ref convertedValue[0],
 ```
 Agora sim! O código está 100%! Caso queira criar um outro LayerMask, é só copiar essas duas linhas a cima e aumentar o valor do índice, e trocar a layer que está sendo referenciada por outra (`ref cube.layer -> ref cube.outraLayer`).
 
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
+
 <span id="conclusao"></span>
 ## Conclusão
-Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu fiz, uma coisas que vale lembrar é que esses metódos mostrados são para você escolher o valor pelo inspetor, se você altera-lo por código não irá alterar visualmente no inspetor, caso queira fazer isso, basta fazer o mesmo código só que com a conversão inversa.
+Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu fiz, caso ache algum erro no código ou uma forma de melhora-lo não hesite de fazer um Pull Request, desde já muito obrigado por me acompanha nesse artigo aqui, até um próximo tutorial ou repositório e falou!
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
