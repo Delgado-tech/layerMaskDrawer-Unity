@@ -17,7 +17,7 @@ public class CubeEditor : Editor {
 
         Cube cube = (Cube)target;
 		
-		if (maskField.Length != PopupsCount) maskField = new int[PopupsCount];
+	if (maskField.Length != PopupsCount) maskField = new int[PopupsCount];
         if (convertedValue.Length != PopupsCount) convertedValue = new int[PopupsCount];
         if (cube.maskField.Length != PopupsCount) cube.maskField = new int[PopupsCount];
 
