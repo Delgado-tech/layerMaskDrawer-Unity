@@ -330,7 +330,55 @@ convertedValue = LayerMask.GetMask(layers.ToArray());
 lateMaskField = maskField;
 mask = convertedValue;
 ```
+Antes de atualizarmos o script `CubeEditor.js`, vamos criar mais um metódo, esse metódo a cima que fizemos é apenas para quando você alterasse um valor pelo inspetor, mas e se você mudasse esse valor internamente? O inspetor não iria mudar, pois só fizemos a conversão do `Editor>>>Cube.js` e não do `Cube.js>>>Editor`, para mudar é simples, basta nós reutilizarmos a formula que fizemos só que para converter o LayerMask para MaskField.
+```cs
+static void InternalMaskUpdate(ref int convertedValue, ref int lateMaskField, ref LayerMask mask) {
+  if (mask != 0 && mask != -1) {
+  layers = new List<string>();
 
+  int tempVal = mask;
+  int x = 1;
+  int l = 0;
+  while (tempVal != 0) {
+
+    if (tempVal > 0 && x * 2 > tempVal) {
+      layers.Add(LayerMask.LayerToName(l));
+      tempVal -= x;
+      x = 1;
+      l = 0;
+      continue;
+    }
+
+
+    if (tempVal < 0 && x * 2 < tempVal) {
+      layers.Add(LayerMask.LayerToName(l));
+      tempVal += x;
+      x = 1;
+      l = 0;
+      continue;
+    }
+
+    x *= 2;
+    l++;
+  }
+
+  lateMaskField = 0;
+  for (int i = 0; i < InternalEditorUtility.layers.Length; i++) {
+    foreach (var layer in layers) {
+      if (InternalEditorUtility.layers[i] == layer) {
+        lateMaskField += (int)Mathf.Pow(2, i);
+       }
+     }
+   }
+
+  } else {
+    lateMaskField = mask;
+  }
+
+  convertedValue = mask;
+  }
+}
+```
 
 <span id="conclusao"></span>
 ## Conclusão
