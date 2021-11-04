@@ -456,7 +456,7 @@ Agora sim! O código está 100%! Caso queira criar um outro LayerMask, é só co
 
 <span id="conclusao"></span>
 ## Conclusão
-Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu fiz, caso ache algum erro no código ou uma forma de melhora-lo não hesite de fazer um Pull Request, desde já muito obrigado por me acompanha nesse artigo aqui, até um próximo tutorial ou repositório e falou!
+Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu fiz, caso ache algum erro no código ou uma forma de melhora-lo não hesite de fazer um Pull Request, desde já muito obrigado por me acompanhar nesse artigo aqui, até um próximo tutorial ou repositório e falou!
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
