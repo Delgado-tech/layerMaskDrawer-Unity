@@ -157,9 +157,16 @@ O código está funcional! Porém visualmente não está igual, as layers vazias
 Você pode adotar esse método com esse código mais simples e menor que irá funcionar perfeitamenta, mas se você quiser que fique funcional __***e***__ visualmente igual, teremos que optar por um método diferente, antes de ver qual é esse método, vou comentar um ajuste que quem queira optar por esse primeiro método pode fazer:
 >
 ```cs
-//podemos alterar o valor diretamente com esse método, então não tem a necessidade da váriavel de instância "maskField" no Editor
-cube.layer = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, layers);
-if(maskField != cube.maskField) cube.maskField = cube.layer; // para fazer a alteração apenas quando for mudado algum valor
+maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, layers);
+
+if (maskField != cube.maskField) { // altera o valor apenas se for mudado no inspetor
+  cube.maskField = maskField;
+  cube.layer = maskField;
+}
+
+if (maskField != cube.layer) { // caso o valor seja mudado internamente precisará atualiza-lo visualmente no inspetor
+  cube.maskField = cube.layer;
+}
 ```
 > <a href="#conclusao"># ir para a Conclusão</a>
 <br>
