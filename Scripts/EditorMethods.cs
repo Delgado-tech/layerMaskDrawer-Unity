@@ -11,6 +11,8 @@ namespace EditorMethods {
                 InternalMaskUpdate(ref convertedValue, ref lateMaskField, ref mask);
                 return;
             }
+            
+            if (maskField == lateMaskField) return;
 
             if (maskField != 0 && maskField != -1) {
                 convertedValue = 0;
