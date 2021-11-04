@@ -168,16 +168,16 @@ if(maskField != cube.maskField) cube.maskField = cube.layer; // para fazer a alt
 ### - Metódo 2
 >
 Apartir de um código diferente um pouco maior, nós conseguimos consertar o visual do resultado anterior, mas antes de nós começarmos a faze-lo devemos entender como que funciona o retorno do LayerMask (MaskField tem o mesmo tipo de retorno também). <br>
-Você já se perguntou por que o retorno do LayerMask.value é apenas um int e não um array de int's já que você pode selecionar multiplas camadas? Para entendermos o por que disso, vamos debugar o valor de LayerMask e ver o retorno dele `Debug.Log(layer.value)`.
+Você já se perguntou por que o retorno do LayerMask.value é apenas um int e não um array de int's já que você pode selecionar multiplas camadas? Para entendermos o por que disso, vamos debugar o valor de LayerMask e ver o retorno dele (`Debug.Log(layer.value)`).
 
 > Faça isso apenas se quiser testar por você mesmo, mas você terá o mesmo resultado do gif abaixo.
 ![debuging](https://user-images.githubusercontent.com/60985347/139731230-f54cc78b-e9cf-419b-b53f-009b3e2d37ab.gif)
 
-Se analizarmos com exceção do `Nothing` e `Everything` (que não são camadas de verdade e sim apenas opções de seleção rápida) conseguimos perceber um padrão apartir da primeira camada, `Default = 1` (layer 0), `TransparentFX = 2` (layer 1), `Ignore Raycast = 4` (layer 2), `Water = 16` (layer 4 (não apareceu no gif, mas teve esse retorno)), Que tipo de calcúlo está sendo usado ali? Se você respondeu potênciação acertou na mosca! Os indíces estão servindo como expoentes de base 2.
+Se analizarmos com exceção do `Nothing` e `Everything` (que não são camadas de verdade e sim apenas opções de seleção rápida) conseguimos perceber um padrão a partir da primeira camada, `Default = 1` (layer 0), `TransparentFX = 2` (layer 1), `Ignore Raycast = 4` (layer 2), `Water = 16` (layer 4 (não apareceu no gif, mas teve esse retorno)), Que tipo de calcúlo está sendo usado ali? Se você respondeu potênciação acertou na mosca! Os indíces estão servindo como expoentes de base 2.
 
 ![image](https://user-images.githubusercontent.com/60985347/139734070-116026f3-1995-4972-b454-214bd5cc695b.png)
 
-Basicamente quando escolhemos uma opção é esse o retorno, e quando escolhemos mais de uma, nos temos a soma das camadas como retorno `(Ex: Layer 1 (2) + Layer 3 (4) = 6)`, e o resultado dessa soma é única para cada combinação de layers selecionadas, por isso a Unity tem um limite de 32 layers, porque a cima disso os retornos terão números muito altos que o tipo int não suporta, se for somado o resultado das layers de 0 até a 30 você terá o retorno de `2147483647` que é exatamente o limite que o int aceita, mas peraí e a layer 31 (a última)? Se somar com ela o valor vai ultrapassar, não? Na lógica sim, por isso que o valor dela é diferente, ao invés dela valer `2^31` ela vale o limite negativo do int `-2147483647`, fazendo assim todas as suas combinações terem retorno negativo quando escolhida. 
+Basicamente quando escolhemos uma opção é esse o retorno, e quando escolhemos mais de uma, nós temos a soma das camadas como retorno `(Ex: Layer 1 (vale 2) + Layer 3 (vale 4) = 6)`, e o resultado dessa soma é única para cada combinação de layers selecionadas, por isso a Unity tem um limite de 32 layers, porque a cima disso os retornos terão números muito altos que o tipo int não suporta, se for somado o resultado das layers de 0 até a 30 você terá o retorno de `2147483647` que é exatamente o limite que o int aceita, mas peraí e a layer 31 (a última)? Se somar com ela o valor vai ultrapassar, não? Na lógica sim, por isso que o valor dela é diferente, ao invés dela valer `2^31` ela vale o limite negativo do int `-2147483647`, fazendo assim todas as suas combinações terem retorno negativo quando escolhida. 
 > Obs: As opções Nothing e Everything correspondem respectivamente aos valores, 0 e -1.
 
 Certo, agora sabendo isso, nós devemos pegar o valor das opções escolhidas do MaskField (que é a somatória delas, porém que não está na ordem com relação aos valores das layers da Unity) e converte-lo para um valor igual do input de LayerMask do script `Cube`. Para isso devemos desenvolver uma formúla para sabermos quais foram as layers escolhidas para dar esse valor (já que o retorno de MaskField só retorna int e não um Array de string com o nome das layers escolhidas).
@@ -203,7 +203,7 @@ int l = 0;
 ✢ `x` será o valor decrescido da váriavel `tempVal`. <br>
 ✢ `l`, corresponde ao índice da layer com aquele valor, ela será adicionada na List de `layers`.
 
-> A formúla funcionará dessa forma: será utilizado um `while` que irá se manter em loop até `tempVal` tiver o valor de 0, a cada chamada a variável `x` multiplicará ela mesma por 2, assim ela corresponderá ao valor de layer (lembrando que o valor das layers é dado usando o índice delas como expoente de base 2), e caso o próximo incremento de `x` ultrapassar o valor de `tempVal` quer dizer que achamos o índice de uma layer, então decrementamos `x` de `tempVal`, e resetamos o valor de `x`, assim o loop de while será repetido até 0, com a variável `l` nós saberemos que índice foi esse, e poderemos adiciona-lo na List `layers`.
+> A formúla funcionará dessa forma: será utilizado um `while` que irá se manter em loop até `tempVal` tiver o valor de 0, a cada chamada a variável `x` multiplicará ela mesma por 2, assim ela corresponderá ao valor de layer (lembrando que o valor das layers é dado usando o índice delas como expoente de base 2), e caso o próximo incremento de `x` ultrapassar o valor de `tempVal` quer dizer que achamos o índice de uma layer, então decrementamos (ou incrementamos caso a layer 31 esteja selecionada) `x` de `tempVal`, e resetamos o valor de `x`, assim o loop de while será repetido até 0, com a variável `l` nós saberemos que índice foi esse, e poderemos usa-lo com o código `InternalEditorUtility.layers[l]` e pegar o nome de sua camada e adiciona-la na List `layers`.
 >
 ```cs
 if (maskField != 0 && maskField != -1) { // caso o valor for 0 ou -1 não precisará chamar esse código, já que não é possível escolher outra opção quando esses valores forem escolhidos
@@ -214,14 +214,24 @@ if (maskField != 0 && maskField != -1) { // caso o valor for 0 ou -1 não precis
   int x = 1;
   int l = 0;
 
-  while (tempVal > 0) {
-    if (x * 2 > tempVal) {
+  while (tempVal != 0) {
+  
+    if (tempVal > 0 && x * 2 > tempVal) {
        layers.Add(InternalEditorUtility.layers[l]); // adiciona na lista o nome da layer correspondente ao índice "l"
        tempVal -= x;
        x = 1;
        l = 0;
        continue;
     }
+    
+    if (tempVal < 0 && x * 2 < tempVal) { // caso a layer 31 for escolhida
+       layers.Add(InternalEditorUtility.layers[l]); // adiciona na lista o nome da layer correspondente ao índice "l"
+       tempVal += x;
+       x = 1;
+       l = 0;
+       continue;
+    }
+    
     x *= 2;
     l++;
   }
@@ -250,60 +260,77 @@ E *tcharam*! Temos uma cópia exata de um popup de LayerMask.
 > ![resultado](https://user-images.githubusercontent.com/60985347/139840821-5f03d114-1fed-4d28-aca9-07b159c3466e.gif) <br>
 > Nota: Podemos dentro do script `Cube` colocar a tag `[HideInInspector]` ao lado de `public LayerMask layer` ou comentar a linha com `base.OnInspectorGUI();` no script do Editor para mostrar apenas o popup criado.
 
-O código está quase finalizado, só precisamos fazer dois ajustes nele para ele ficar otimizado e prático. <br>
+O código ainda não está finalizado, ainda precisamos fazer alguns ajustes nele para ele ficar otimizado e prático. <br>
 Primeira coisa, podemos fazer com que apenas o código de conversão seja executado quando for alterado algum valor no popup, ao invés de executa-lo a todo momento.
 ```cs
 if(maskField == cube.maskField) return; // se os valores continuarem iguais, não tem necessidades de executar a formula
 // if (maskField != 0 && maskField != -1) {
 ``` 
-Segunda coisa, toda essa formúla está para apenas um único popup, e se você quiser adicionar mais de um teria que ficar copiando e colando essa formúla, não seria prático e ficaria poluído, por isso podemos colocar essa formúla em um metódo e chama-la para aquele popup.
+Segunda coisa, toda essa formúla está para apenas um único popup, e se você quiser adicionar mais de um teria que ficar copiando e colando essa formúla, não seria prático e ficaria poluído o seu script, por isso podemos criar um script separado com uma classe estática e um metódo estático, assim nós só chamaremos esse metódo por essa classe ao invés de ficar copiando e colando esse código para cada popup.
+<br>
+
+EditorMethods.cs
 ```cs
-void LayerMaskDrawer(int maskField, ref int lateMaskField, ref LayerMask mask){
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditorInternal;
+
+namespace EditorMethods { // podemos criar um namespace para só chamar essa função quando formos usa-la em algum script
+  public static class LayerMaskDrawer {
+  
+    static List<string> layers; // <--- Variável realocada para cá
+    
+      public static void Draw(int maskField, ref int lateMaskField, ref int convertedValue, ref LayerMask mask) { // palavra-chave ref = o valor recebido quando for alterado aqui será alterado na própria variável passada ao invés de receber apenas a cópia do valor
+        ////////////////Metódo//////////////////
+      }     
+  }
 }
 ```
-O primeiro valor será referente ao retorno do MaskField, o segundo valor será referente ao `cube.maskField` e o terceiro referente a variável da LayerMask. <br>
-Nesse código a única coisa que vamos fazer é substituir onde está `cube.maskField` por `lateMaskField` e onde está `cube.layer` por `mask`.
+Agora podemos recortar a nossa formula e colá-la aqui, apenas vamos mudar os nomes de duas variáveis, `cube.maskField = lateMaskField` e `cube.layer = mask`.
 ```cs
-void LayerMaskDrawer(int maskField, ref int lateMaskField, ref LayerMask mask) {
+if (maskField == lateMaskField) return;
 
-  if (maskField == lateMaskField) return;
 
-    if (maskField != 0 && maskField != -1) {
-       convertedValue = 0;
-       layers = new List<string>();
+if (maskField != 0 && maskField != -1) {
+  convertedValue = 0;
+  layers = new List<string>();
 
-       int tempVal = maskField;
-       int x = 1;
-       int l = 0;
+  int tempVal = maskField;
+  int x = 1;
+  int l = 0;
 
-       while (tempVal > 0) {
-          if (x * 2 > tempVal) {
-            layers.Add(InternalEditorUtility.layers[l]);
-            tempVal -= x;
-            x = 1;
-            l = 0;
-            continue;
-       }
-      x *= 2;
-      l++;
-    }
-
-    convertedValue = LayerMask.GetMask(layers.ToArray());
-
-  } else {
-     convertedValue = maskField;
+while (tempVal != 0) {
+  if (tempVal > 0 && x * 2 > tempVal) {
+    layers.Add(InternalEditorUtility.layers[l]);
+    tempVal -= x;
+    x = 1;
+    l = 0;
+    continue;
   }
 
-  lateMaskField = maskField;
-  mask = convertedValue;
 
+  if (tempVal < 0 && x * 2 < tempVal) {
+    layers.Add(InternalEditorUtility.layers[l]);
+    tempVal += x;
+    x = 1;
+    l = 0;
+    continue;
+  }
+
+  x *= 2;
+  l++;
 }
+
+convertedValue = LayerMask.GetMask(layers.ToArray());
+
+} else {
+  convertedValue = maskField;
+}
+
+lateMaskField = maskField;
+mask = convertedValue;
 ```
-Agora é só chamar o metódo:
-```cs
-maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, InternalEditorUtility.layers);
-LayerMaskDrawer(maskField, ref cube.maskField, ref cube.layer);
-```
+
 
 <span id="conclusao"></span>
 ## Conclusão
