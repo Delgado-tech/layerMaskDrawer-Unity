@@ -7,54 +7,24 @@ using UnityEditorInternal;
 [CustomEditor(typeof(Cube))]
 public class CubeEditor : Editor {
 
-    int maskField;
-    int convertedValue;
+    int PopupsCount = 2;
+    int[] maskField;
+    int[] convertedValue;
     List<string> layers;
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
 
         Cube cube = (Cube)target;
+		
+		if (maskField.Length != PopupsCount) maskField = new int[PopupsCount];
+        if (convertedValue.Length != PopupsCount) convertedValue = new int[PopupsCount];
+        if (cube.maskField.Length != PopupsCount) cube.maskField = new int[PopupsCount];
 
-        maskField = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField, InternalEditorUtility.layers);
-        LayerMaskDrawer(maskField, ref cube.maskField, ref cube.layer);
-
-
-    }
-
-    void LayerMaskDrawer(int maskField, ref int lateMaskField, ref LayerMask mask) {
-
-        if (maskField == lateMaskField) return;
-
-        if (maskField != 0 && maskField != -1) {
-            convertedValue = 0;
-            layers = new List<string>();
-
-            int tempVal = maskField;
-            int x = 1;
-            int l = 0;
-
-            while (tempVal > 0) {
-                if (x * 2 > tempVal) {
-                    layers.Add(InternalEditorUtility.layers[l]);
-                    tempVal -= x;
-                    x = 1;
-                    l = 0;
-                    continue;
-                }
-                x *= 2;
-                l++;
-            }
-
-            convertedValue = LayerMask.GetMask(layers.ToArray());
-
-        } else {
-            convertedValue = maskField;
-        }
-
-        lateMaskField = maskField;
-        mask = convertedValue;
+        maskField[0] = EditorGUILayout.MaskField(new GUIContent("Layer", "escolha uma layer"), cube.maskField[0], InternalEditorUtility.layers);
+        LayerMaskDrawer(maskField[0], ref cube.maskField[0], ref convertedValue[0],ref cube.layer);
 
     }
+}
     
     
