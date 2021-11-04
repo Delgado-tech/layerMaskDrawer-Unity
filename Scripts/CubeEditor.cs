@@ -10,7 +10,6 @@ public class CubeEditor : Editor {
     int PopupsCount = 2;
     int[] maskField;
     int[] convertedValue;
-    List<string> layers;
 
     public override void OnInspectorGUI() {
         base.OnInspectorGUI();
