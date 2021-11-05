@@ -440,7 +440,7 @@ int[] convertedValue;
 ```
 Cube.js
 ```cs
-[HideInInspector] public int[] maskField;
+[HideInInspector] public int[] maskField = new int[] {};
 ```
 <br>
 
