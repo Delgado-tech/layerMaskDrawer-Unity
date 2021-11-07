@@ -1,5 +1,5 @@
 <span id="header"></span>
-<h1 align="center"> LayerMask no Editor [Unity] </h1>
+<h1 align="center"> LayerMask no Editor [Unity] (Corrigindo) </h1>
 
 > <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
 <br>
@@ -49,6 +49,16 @@ public class CubeEditor : Editor {
         //base.OnInspectorGUI(); //<--- Representa os elementos que estão sendo mostrados no Inspetor padrão, basta comentá-lo para mostrar apenas o que está presente aqui, use para debugar seus valores se quiser
 
   ``` 
+  <br><br>
+## Bifurcação
+Agora para prosseguirmos podemos optar por dois caminhos para fazer a LayerMask no Editor, e eles são usando `EditorGUILayout.PropertyField` (Melhor forma) e `EditorGUILayout.MaskField` (Desnecessário, mas bom para entender mais sobre o funcionamento do LayerMask). <br>
+
+> **<a href="#topico2"># usando `EditorGUILayout.MaskField`</a>** <br>
+> **<a href="#topico2"># usando `EditorGUILayout.PropertyField`</a>**
+
+
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
+  
   Nós vamos usar variáveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. Para você vincular os valores do Editor com a classe `Cube` você precisa acessar esses valores e modifica-los quando for alterado algo no Inspetor sobrescrito, para isso Instâncie a classe `Cube`. 
   ```cs
   Cube cube = (Cube)target;
