@@ -1,5 +1,5 @@
 <span id="header"></span>
-<h1 align="center"> LayerMask no Editor [Unity] (Corrigindo) </h1>
+<h1 align="center"> LayerMask no Editor [Unity]</h1>
 
 > <span align="justify">Nesse artigo eu irei mostrar como podemos criar um popup de LayerMask pelo editor, eu irei explicar passo a passo de como fazer isso, e do que está acontecendo no código, caso você queira apenas o código, entre na pasta `Scripts` desse repositório e copie-o e adapite-o ao seu projeto. </span>
 <br>
@@ -8,13 +8,15 @@
 
 <span id="sumario"></span>
 # Sumário
-> - **<a href="#topico1">1. Introdução e preparando o ambiente</a>**
-> - **<a href="#topico2">2. Criando o popup</a>**
-> - **<a href="#topico3">3. Entendendo possíveis erros</a>**
-> - **<a href="#topico4">4. Consertando o popup</a>** <br>
-> ✢ **<a href="#4_subtopico1">4.1. Metódo 1</a>** <br>
-> ✢ **<a href="#4_subtopico2">4.2. Metódo 2</a>** ← A resolução do script presente no repositório
-> - **<a href="#conclusao">5. Conclusão</a>**
+> - **<a href="#topico1">Introdução e preparando o ambiente</a>**
+> - **<a href="#PropertyField">Usando PropertyField</a>**
+> - **<a href="#maskfield">Usando MaskField</a>**
+>   - **<a href="#topico2">1. Criando o popup</a>**
+>   - **<a href="#topico3">2. Entendendo possíveis erros</a>**
+>   - **<a href="#topico4">3. Consertando o popup</a>** <br>
+>  ✢ **<a href="#4_subtopico1">3.1. Metódo 1</a>** <br>
+>   ✢ **<a href="#4_subtopico2">3.2. Metódo 2</a>**
+> - **<a href="#conclusao">Conclusão</a>**
 >
 >- **<a href="#footer">Rodapé</a>** <br>
 #
@@ -49,24 +51,60 @@ public class CubeEditor : Editor {
         //base.OnInspectorGUI(); //<--- Representa os elementos que estão sendo mostrados no Inspetor padrão, basta comentá-lo para mostrar apenas o que está presente aqui, use para debugar seus valores se quiser
 
   ``` 
+  Nós vamos usar variáveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. 
   <br><br>
 ## Bifurcação
 Agora para prosseguirmos podemos optar por dois caminhos para fazer a LayerMask no Editor, e eles são usando `EditorGUILayout.PropertyField` (Melhor forma) e `EditorGUILayout.MaskField` (Desnecessário, mas bom para entender mais sobre o funcionamento do LayerMask). <br>
 
-> **<a href="#topico2"># usando `EditorGUILayout.MaskField`</a>** <br>
-> **<a href="#topico2"># usando `EditorGUILayout.PropertyField`</a>**
-
+> **<a href="#PropertyField"># usando `EditorGUILayout.PropertyField`</a>** <br>
+> **<a href="#maskfield"># usando `EditorGUILayout.MaskField`</a>** 
 
 <div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
-  
-  Nós vamos usar variáveis e metódos que permitirão fazermos o inspetor ao nosso gosto, como o `EditorGUILayout` que nos disponibiliza vários InputFields (de float, string, etc), porém não disponibilizará valores referentes de nenhuma função da Unity, você precisará dá-los você mesmo, basicamente você estará recebendo a carcaça do Input, popup, textbox, etc. Para você vincular os valores do Editor com a classe `Cube` você precisa acessar esses valores e modifica-los quando for alterado algo no Inspetor sobrescrito, para isso Instâncie a classe `Cube`. 
+
+
+<span id="PropertyField"></span>
+## EditorGUILayout.PropertyField
+  PropertyField é um Field especial para receber valores serializados, nos permitindo criar fields de Events, GameObjects, basicamente qualquer váriavel serializada, (para mais informações sobre PropertyField <a href="https://docs.unity3d.com/ScriptReference/EditorGUILayout.PropertyField.html">Clique aqui</a>), vamos criar uma variável de classe do tipo `SerializedProperty`, que é uma classe para edição de propriedades de objetos, ela trabalha junto com as classe SerializedObject e Editor. <br>
+```cs
+SerializedProperty layer;
+```
+
+  Precisamos dar a essa variável algum valor, para inicializar-mos ela usamos o metódo `void OnEnable()`, que é chamado quando um objeto é habilitado e ativo. <br>
+```cs
+void OnEnabled() {
+  layer = serializedObject.FindProperty("layer");
+}
+```
+
+✢ `serializedObject` representa os objetos que serão inspecionados; <br>
+✢ `FindProperty(string)` encontra a propriedade serializada pelo nome dele.
+
+Agora para chamar o Field: <br>
+```cs
+public override void OnInspectorGUI() {
+   //base.OnInspectorGUI(); <--- comentado para não mostrar as variáveis do script Cube
+   EditorGUILayout.PropertyField(layer, new GUIContent("Label", "Descrição"));
+```
+Após isso no final de OnInspectorGUI() você coloca `serializedObject.ApplyModifiedProperties()`, esse metódo irá aplicar as modificações feitas pelo Editor no script Cube. <br>
+```cs
+  serializedObject.ApplyModifiedProperties();
+}
+```
+E pronto! Com apenas isso você pode utilizar LayerMask, GameObjetc, Events, etc pelo Editor. Se quiser continuar nesse artigo, você verá alguns metódos para fazer isso utilizando o MaskField, e também entenderá um pouco sobre o funcionamento de LayerMask.
+
+> <a href="#conclusao"># ir para a Conclusão</a>
+
+<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
+
+<span id="maskfield"></span>
+## EditorGUILayout.MaskField
+
+  Antes de qualquer coisa precisamos vicular os valores do Editor com a classe `Cube`, você precisa acessar esses valores e modifica-los quando for alterado algo no Inspetor sobrescrito. Para isso Instâncie a classe `Cube`:
   ```cs
   Cube cube = (Cube)target;
   ```
   Agora nos podemos acessar a variável da LayerMask e alterá-la quando o Inspetor sobrescrito for mudado (via `cube.layer`).
 <br>
-
-<div align="center"><img src="https://user-images.githubusercontent.com/60985347/139723592-63c80e23-fdaa-4ffc-ae79-0762993afee7.png" width="20%"></div>
 
 <span id="topico2"></span>
 ## Criando o popup
@@ -202,7 +240,7 @@ Certo, agora sabendo isso, nós devemos pegar o valor das opções escolhidas do
 Vamos começar criando as váriaveis necessárias, ao todo são 5 váriaveis, 2 de instância e 3 locais.
 
 ```cs
-// variáveis de instância
+// variáveis de classe
 int convertedValue;
 List<string> layers;
 ```
@@ -473,7 +511,7 @@ Agora sim! O código está 100%! Caso queira criar um outro LayerMask, é só co
 
 <span id="conclusao"></span>
 ## Conclusão
-Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu fiz, caso ache algum erro no código ou uma forma de melhora-lo não hesite de fazer um Pull Request, desde já muito obrigado por me acompanhar nesse artigo aqui, até um próximo tutorial ou repositório e falou!
+Existem diversos modos de fazer esse código, mas eu quis compartilhar esse metódo que eu desenvolvi do MaskField e esse jeito simples de fazer pelo PropertyField, caso ache algum erro no código ou uma forma de melhora-lo não hesite de fazer um Pull Request, desde já muito obrigado por me acompanhar nesse artigo aqui, até um próximo tutorial ou repositório e falou!
 
 <span id="footer"></span>
 <div align="center"><a href="#header">Voltar ao topo</a></div>
